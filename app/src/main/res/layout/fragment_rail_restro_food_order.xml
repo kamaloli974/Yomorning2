@@ -1,0 +1,40 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrder">
+    <RelativeLayout
+        android:id="@+id/station_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/station_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="70dp"
+            android:inputType="textPersonName"
+            android:layout_centerHorizontal="true"
+            android:hint="Enter Station Code(Eg. dli for Delhi)"
+            android:gravity="center"/>
+        <Button
+            android:id="@+id/submit_station_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/station_code"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Find"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"/>
+    </RelativeLayout>
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rail_restro_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</FrameLayout>
