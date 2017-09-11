@@ -15,7 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PresentationActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -25,10 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".railrestroactivities.RailRestroMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity
+            android:name=".railrestroactivities.RailRestroMenuActivity"
             android:label="@string/rail_restro_menu"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:label="Order Summary"
+            android:name=".railrestroactivities.RailRestroCartItemDetailDialog"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
+
+        </activity>
     </application>
 
 </manifest>

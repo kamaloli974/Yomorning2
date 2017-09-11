@@ -1,6 +1,7 @@
 package com.yomorning.lavafood.yomorning.railrestroactivities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
 import com.yomorning.lavafood.yomorning.adapters.RailRestroMenuAdapter;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
 import com.yomorning.lavafood.yomorning.models.RailRestroMenuModel;
+import com.yomorning.lavafood.yomorning.models.RailRestroOrderModel;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
 import com.yomorning.lavafood.yomorning.rectifier.BasicFunctionHandler;
 
@@ -30,13 +34,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class RailRestroMenuActivity extends AppCompatActivity implements RailRestroMenuAdapter.OnMenuItemClickedListener{
+public class RailRestroMenuActivity extends AppCompatActivity implements RailRestroMenuAdapter.OnMenuItemClickedListener,
+        View.OnClickListener{
     RailRestroVendorsModel vendorsModel;
     private RecyclerView recyclerView;
     private BasicFunctionHandler basicFunctionHandler;
     TextView shoppingItemCount;
     ProgressDialog dialog;
+    ImageView shoppingCart;
+    HashMap<Integer,RailRestroOrderModel> orderModelHashMap;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +53,11 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         dialog=new ProgressDialog(this);
+        orderModelHashMap=new HashMap<>();
         vendorsModel= getIntent().getParcelableExtra("railRestroVendorsModel");
         recyclerView=(RecyclerView)findViewById(R.id.menu_recycler_view);
+        shoppingCart=(ImageView)findViewById(R.id.shopping_cart);
+        shoppingCart.setOnClickListener(this);
         basicFunctionHandler=new BasicFunctionHandler(RailRestroMenuActivity.this);
         menuJsonDataParser(vendorsModel.getVendorId());
     }
@@ -60,7 +71,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.rail_restro_food_order,menu);
         return true;
     }
 
@@ -152,11 +163,25 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
 
     @Override
     public void getSelectedItem(RailRestroMenuModel model) {
-        if(!shoppingItemCount.getText().equals("")){
-            shoppingItemCount.setText(Integer.parseInt(shoppingItemCount.getText().toString())+1+"");
+        if (orderModelHashMap.containsKey(model.getItemId())){
+            RailRestroOrderModel orderModel=orderModelHashMap.get(model.getItemId());
+            orderModel.setItemCount(orderModel.getItemCount()+1);
         }
         else{
-            shoppingItemCount.setText("1");
+            RailRestroOrderModel order=new RailRestroOrderModel();
+            order.setItemId(model.getItemId());
+            order.setItemCount(1);
+            order.setModel(model);
+            orderModelHashMap.put(model.getItemId(),order);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId()==R.id.shopping_cart){
+            Intent intent=new Intent(RailRestroMenuActivity.this,RailRestroCartItemDetailDialog.class);
+            startActivity(intent);
         }
     }
 }
+
