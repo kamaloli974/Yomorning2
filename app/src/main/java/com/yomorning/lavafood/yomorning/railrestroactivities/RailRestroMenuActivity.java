@@ -22,8 +22,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
+import com.yomorning.lavafood.yomorning.adapters.RailCartItemDisplay;
 import com.yomorning.lavafood.yomorning.adapters.RailRestroMenuAdapter;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
+import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrderSystem;
 import com.yomorning.lavafood.yomorning.models.RailRestroMenuModel;
 import com.yomorning.lavafood.yomorning.models.RailRestroOrderModel;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
@@ -34,10 +36,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class RailRestroMenuActivity extends AppCompatActivity implements RailRestroMenuAdapter.OnMenuItemClickedListener,
-        View.OnClickListener{
+        View.OnClickListener,RailCartItemDisplay.OnCartItemChangedListener{
     RailRestroVendorsModel vendorsModel;
     private RecyclerView recyclerView;
     private BasicFunctionHandler basicFunctionHandler;
@@ -61,6 +64,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         basicFunctionHandler=new BasicFunctionHandler(RailRestroMenuActivity.this);
         menuJsonDataParser(vendorsModel.getVendorId());
     }
+
     private void setAdapterToPopulateMenus(ArrayList<RailRestroMenuModel> menu){
         RailRestroMenuAdapter adapter=new RailRestroMenuAdapter(this,menu);
         LinearLayoutManager manager=new LinearLayoutManager(this);
@@ -69,6 +73,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.rail_restro_food_order,menu);
@@ -166,6 +171,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         if (orderModelHashMap.containsKey(model.getItemId())){
             RailRestroOrderModel orderModel=orderModelHashMap.get(model.getItemId());
             orderModel.setItemCount(orderModel.getItemCount()+1);
+            Log.e(""+orderModel.getItemCount()+model.getItemName(),"Item Id"+model.getItemId());
         }
         else{
             RailRestroOrderModel order=new RailRestroOrderModel();
@@ -173,15 +179,21 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             order.setItemCount(1);
             order.setModel(model);
             orderModelHashMap.put(model.getItemId(),order);
+            Log.e("First Time","Item id"+model.getItemName());
         }
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.shopping_cart){
-            Intent intent=new Intent(RailRestroMenuActivity.this,RailRestroCartItemDetailDialog.class);
-            startActivity(intent);
+            RailRestroFoodOrderSystem orderSystem=new RailRestroFoodOrderSystem();
+            orderSystem.show(getFragmentManager(),"menuDetail");
         }
+    }
+
+    @Override
+    public void getChangedCartDetail(HashMap<Integer, RailRestroOrderModel> changedOrder) {
+
     }
 }
 

@@ -29,6 +29,7 @@
             android:name=".railrestroactivities.RailRestroMenuActivity"
             android:label="@string/rail_restro_menu"
             android:parentActivityName=".MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:label="Order Summary"
