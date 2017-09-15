@@ -1,5 +1,6 @@
 package com.yomorning.lavafood.yomorning;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
@@ -47,6 +48,10 @@ public class MainActivity extends AppCompatActivity
         railRestroFoodOrder=new RailRestroFoodOrder();
         fragmentManager=getFragmentManager();
         android.app.FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+        Fragment fragment=fragmentManager.findFragmentByTag("railRestroFoodOrder");
+        if(fragment!=null){
+            fragmentTransaction.remove(fragment);
+        }
         fragmentTransaction.add(R.id.home_activity_container,railRestroFoodOrder,"railRestroFoodOrder");
         fragmentTransaction.commit();
 
@@ -126,5 +131,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 }

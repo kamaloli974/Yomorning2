@@ -1,20 +1,15 @@
 package com.yomorning.lavafood.yomorning.railrestroactivities;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -22,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
-import com.yomorning.lavafood.yomorning.adapters.RailCartItemDisplay;
 import com.yomorning.lavafood.yomorning.adapters.RailRestroMenuAdapter;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
 import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrderSystem;
@@ -36,11 +30,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class RailRestroMenuActivity extends AppCompatActivity implements RailRestroMenuAdapter.OnMenuItemClickedListener,
-        View.OnClickListener,RailCartItemDisplay.OnCartItemChangedListener{
+        View.OnClickListener,RailRestroFoodOrderSystem.OnCartItemChangedListener{
     RailRestroVendorsModel vendorsModel;
     private RecyclerView recyclerView;
     private BasicFunctionHandler basicFunctionHandler;
@@ -48,6 +41,8 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     ProgressDialog dialog;
     ImageView shoppingCart;
     HashMap<Integer,RailRestroOrderModel> orderModelHashMap;
+    int totalNumberOfItemsInCart=0;
+    double totalPrice;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,27 +69,6 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.rail_restro_food_order,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id=item.getItemId();
-        switch (id){
-            case R.id.action_settings:
-                Toast.makeText(this,"Setting selected",Toast.LENGTH_SHORT).show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void showToast(MenuItem item){
-        Toast.makeText(this,"Hello",Toast.LENGTH_LONG).show();
-    }
-
     private void menuJsonDataParser(String outletId){
         dialog.setMessage("Processing your request...");
         dialog.show();
@@ -112,6 +86,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             @Override
             public void onErrorResponse(VolleyError error) {
                 dialog.hide();
+
                 basicFunctionHandler.showAlertDialog("Error!","VolleyError Occure and message is "+error.getCause());
             }
         });
@@ -172,28 +147,45 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             RailRestroOrderModel orderModel=orderModelHashMap.get(model.getItemId());
             orderModel.setItemCount(orderModel.getItemCount()+1);
             Log.e(""+orderModel.getItemCount()+model.getItemName(),"Item Id"+model.getItemId());
+            totalNumberOfItemsInCart=totalNumberOfItemsInCart+1;
+            totalPrice=totalPrice+model.getSellingPrice();
+            shoppingItemCount.setText(totalNumberOfItemsInCart+"");
         }
         else{
+            totalNumberOfItemsInCart=totalNumberOfItemsInCart+1;
+            totalPrice=totalPrice+model.getSellingPrice();
             RailRestroOrderModel order=new RailRestroOrderModel();
             order.setItemId(model.getItemId());
             order.setItemCount(1);
             order.setModel(model);
             orderModelHashMap.put(model.getItemId(),order);
             Log.e("First Time","Item id"+model.getItemName());
+            shoppingItemCount.setText(totalNumberOfItemsInCart+"");
         }
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.shopping_cart){
-            RailRestroFoodOrderSystem orderSystem=new RailRestroFoodOrderSystem();
-            orderSystem.show(getFragmentManager(),"menuDetail");
+            if(totalNumberOfItemsInCart==0){
+                basicFunctionHandler.showAlertDialog("Opps!!","You don't have anything in cart. Please" +
+                        " select some food items from menu.");
+            }
+            else{
+                RailRestroFoodOrderSystem orderSystem= RailRestroFoodOrderSystem.newInstance(orderModelHashMap,
+                        totalNumberOfItemsInCart, totalPrice);
+                orderSystem.show(getFragmentManager(),"cartDisplayFragment");
+            }
         }
     }
 
     @Override
-    public void getChangedCartDetail(HashMap<Integer, RailRestroOrderModel> changedOrder) {
-
+    public void getChangedCartDetail(HashMap<Integer, RailRestroOrderModel> changedOrder, int totalItems,
+                                     double totalPrice) {
+        this.totalPrice=totalPrice;
+        this.totalNumberOfItemsInCart=totalItems;
+        this.orderModelHashMap=changedOrder;
+        shoppingItemCount.setText(totalNumberOfItemsInCart+"");
     }
 }
 

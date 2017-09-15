@@ -1,11 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:background="@android:color/black"/>
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/divider"
         android:id="@+id/cart_detail_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
-
+    <TextView
+        android:layout_marginTop="@dimen/normal_margin"
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/cart_detail_recycler_view"
+        android:background="@android:color/black"/>
+    <LinearLayout
+        android:id="@+id/product_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_below="@id/divider1">
+        <TextView
+            android:layout_width="0dp"
+            android:padding="@dimen/normal_padding"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/normal_margin"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Total Items: "/>
+        <TextView
+            android:id="@+id/total_items"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:text="Value"
+            android:layout_margin="@dimen/normal_margin"
+            android:padding="@dimen/normal_padding"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/total_amaount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_below="@id/product_detail">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:layout_margin="@dimen/normal_margin"
+            android:padding="@dimen/normal_padding"
+            android:textColor="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Grand Total"/>
+        <TextView
+            android:id="@+id/total_price"
+            android:layout_width="0dp"
+            android:textColor="@color/colorAccent"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:padding="@dimen/normal_padding"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Value"
+            android:layout_margin="@dimen/normal_margin"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </RelativeLayout>
+</ScrollView>

@@ -126,6 +126,7 @@ public class RailRestroFoodOrder extends Fragment implements View.OnClickListene
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        dialog=null;
     }
 
     @Override
@@ -189,6 +190,7 @@ public class RailRestroFoodOrder extends Fragment implements View.OnClickListene
             @Override
             public void onErrorResponse(VolleyError error) {
                 dialog.hide();
+                stationInfo.setVisibility(View.VISIBLE);
               basicFunctionHandler.showAlertDialog("Error!","VolleyError Occure and message is "+error.getCause());
             }
         });
@@ -228,6 +230,7 @@ public class RailRestroFoodOrder extends Fragment implements View.OnClickListene
                 return arrayList;
             }
             else{
+                stationInfo.setVisibility(View.VISIBLE);
                 basicFunctionHandler.showAlertDialog("Sorry!","Our service is not available to the station you entered.");
                 return arrayList;
             }

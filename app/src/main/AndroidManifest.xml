@@ -34,7 +34,7 @@
         <activity
             android:label="Order Summary"
             android:name=".railrestroactivities.RailRestroCartItemDetailDialog"
-            android:theme="@style/Theme.AppCompat.Light.Dialog">
+            android:theme="@style/AppTheme">
 
         </activity>
     </application>
