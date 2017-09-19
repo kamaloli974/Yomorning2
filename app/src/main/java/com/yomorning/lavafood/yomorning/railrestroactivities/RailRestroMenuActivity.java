@@ -108,23 +108,25 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
                     for (int j=0;j<menuArray.length();j++){
                         RailRestroMenuModel model=new RailRestroMenuModel();
                         JSONObject indivisualItem=menuArray.getJSONObject(j);
-                        model.setCategoryId(categoryId);
-                        model.setCategoryName(categoryName);
-                        model.setBasePrice(Integer.parseInt(indivisualItem.getString("base_price")));
-                        model.setItemId(Integer.parseInt(indivisualItem.getString("item_id")));
-                        model.setItemName(indivisualItem.getString("item_name"));
-                        model.setServiceTax(Double.parseDouble(indivisualItem.getString("service_tax")));
-                        model.setVat(Integer.parseInt(indivisualItem.getString("vat")));
-                        model.setItemType(Integer.parseInt(indivisualItem.getString("itemtype_id")));
-                        model.setStatus(Integer.parseInt(indivisualItem.getString("status")));
-                        model.setSellingPrice(indivisualItem.getInt("selling_price"));
-                        model.setTimeSlot(indivisualItem.getJSONObject("menu_tags").getString("time_slot"));
-                        model.setFoodItemDescription(indivisualItem.getString("description"));
-                        model.setFoodCategory(indivisualItem.getJSONObject("menu_tags").getString("type"));
-                        model.setActive(indivisualItem.getBoolean("is_active"));
-                        model.setOpeningTime(indivisualItem.getString("opening_time"));
-                        model.setClosingTime(indivisualItem.getString("closing_time"));
-                        menuArrayList.add(model);
+                        if(indivisualItem.getBoolean("is_active")){
+                            model.setCategoryId(categoryId);
+                            model.setCategoryName(categoryName);
+                            model.setBasePrice(Integer.parseInt(indivisualItem.getString("base_price")));
+                            model.setItemId(Integer.parseInt(indivisualItem.getString("item_id")));
+                            model.setItemName(indivisualItem.getString("item_name"));
+                            model.setServiceTax(Double.parseDouble(indivisualItem.getString("service_tax")));
+                            model.setVat(Integer.parseInt(indivisualItem.getString("vat")));
+                            model.setItemType(Integer.parseInt(indivisualItem.getString("itemtype_id")));
+                            model.setStatus(Integer.parseInt(indivisualItem.getString("status")));
+                            model.setSellingPrice(indivisualItem.getInt("selling_price"));
+                            model.setTimeSlot(indivisualItem.getJSONObject("menu_tags").getString("time_slot"));
+                            model.setFoodItemDescription(indivisualItem.getString("description"));
+                            model.setFoodCategory(indivisualItem.getJSONObject("menu_tags").getString("type"));
+                            model.setActive(indivisualItem.getBoolean("is_active"));
+                            model.setOpeningTime(indivisualItem.getString("opening_time"));
+                            model.setClosingTime(indivisualItem.getString("closing_time"));
+                            menuArrayList.add(model);
+                        }
                     }
                 }
                 return menuArrayList;

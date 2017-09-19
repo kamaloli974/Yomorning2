@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="security_questions">
+        <item>Select security question</item>
+        <item>What\'s your favourite place to visit ?</item>
+        <item>What\'s your mothers name ?</item>
+        <item>What\'s your birth place name ?</item>
+        <item>What\'s your best friend\'s name ?</item>
+        <item>What is dream job ?</item>
+        <item>Who is your favourite actor ?</item>
+    </array>
+</resources>

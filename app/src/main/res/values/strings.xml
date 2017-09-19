@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yomorning</string>
+    <string name="app_name">Bornbhukkad</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,4 +11,20 @@
     <string name="rail_restro_menu">Food Menu</string>
     <string name="checkout">Checkout</string>
     <string name="date_format">dd/mm/yy</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email Address</string>
+    <string name="hour_format">hh:mm</string>
+
+    <string name="welcome">Welcome To Bornbhukkad</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_address">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="dont_have_account">Don\'t have account ? <a>Click here</a> </string>
+    <string name="title_activity_testing">Testing</string>
+    <string name="security_answer_hint">Enter your answer</string>
+    <string name="forgot_password_text">Forgot password ? Click here</string>
 </resources>

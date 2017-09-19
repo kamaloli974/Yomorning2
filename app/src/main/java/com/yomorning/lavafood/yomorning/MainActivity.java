@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,17 +28,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrder;
 import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrderSystem;
+import com.yomorning.lavafood.yomorning.fragments.StationInfo;
+import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,RailRestroFoodOrder.OnFragmentInteractionListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        RailRestroFoodOrder.OnFragmentInteractionListener, StationInfo.receiveListOfVendors {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     FragmentManager fragmentManager;
     RailRestroFoodOrder railRestroFoodOrder;
+    StationInfo stationInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +51,20 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        railRestroFoodOrder=new RailRestroFoodOrder();
+        stationInfo=new StationInfo();
         fragmentManager=getFragmentManager();
         android.app.FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-        Fragment fragment=fragmentManager.findFragmentByTag("railRestroFoodOrder");
+        Fragment fragment=fragmentManager.findFragmentByTag("stationInfo");
         if(fragment!=null){
             fragmentTransaction.remove(fragment);
         }
-        fragmentTransaction.add(R.id.home_activity_container,railRestroFoodOrder,"railRestroFoodOrder");
-        fragmentTransaction.commit();
+        else{
+            fragmentTransaction.add(R.id.home_activity_container,stationInfo,"stationInfo");
+            fragmentTransaction.commit();
+        }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -77,8 +79,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        }
+        else {
+            if (getFragmentManager().getBackStackEntryCount()>0){
+                getFragmentManager().popBackStack();
+            }
+            else {
+                System.exit(1);
+            }
+
         }
     }
 
@@ -110,8 +119,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.travel_food) {
-            FragmentTransaction transaction=fragmentManager.beginTransaction();
-            transaction.add(new RailRestroFoodOrder(),"RailRestro").commit();
+            Fragment fragment=fragmentManager.findFragmentByTag("stationInfo");
+            if (fragment==null){
+                FragmentTransaction transaction=fragmentManager.beginTransaction();
+                transaction.add(StationInfo.newInstance(),"stationInfo").commit();
+            }
+            else {
+                FragmentTransaction transaction=getFragmentManager().beginTransaction();
+                transaction.replace(R.id.home_activity_container,fragment,"stationInfo");
+                transaction.commit();
+            }
             // Handle the camera action
         }  else if (id == R.id.home_delivery) {
 
@@ -136,12 +153,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        finish();
+    }
+
+    @Override
+    public void onFragmentInteraction(ArrayList<RailRestroVendorsModel> list) {
+        Log.e("FoodStore",list.toString());
+        Fragment fragment=getFragmentManager().findFragmentByTag("railRestroFoodOrder");
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if(fragment!=null){
+            transaction.remove(fragment);
+        }
+        else{
+            transaction.replace(R.id.home_activity_container,RailRestroFoodOrder.newInstance(list),"railRestroFoodOrder");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }

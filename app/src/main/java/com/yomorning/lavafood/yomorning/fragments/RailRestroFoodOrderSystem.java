@@ -41,13 +41,13 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
     Context context;
     OnCartItemChangedListener cartItemChangedListener;
     @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.railrestro_cart_item_detail,container);
-        getDialog().setTitle("Order Summary");
-        //setOrderDetailToRecyclerView();
-        return view;
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//        view=inflater.inflate(R.layout.railrestro_cart_item_detail,container);
+//        getDialog().setTitle("Order Summary");
+//        //setOrderDetailToRecyclerView();
+//        return view;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+        super.onCreateDialog(savedInstanceState);
         final AlertDialog.Builder dialogBuilder=new AlertDialog.Builder(getActivity());
         dialogBuilder.setTitle("Order Summary");
         dialogBuilder.setIcon(R.mipmap.shopping_cart);
@@ -113,17 +113,19 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
         totalItemsInCart.setText(totalItems+"");
         totalPriceTextView.setText("Rs."+totalPrice+"");
         dialogBuilder.setView(view);
-         Dialog dialog=dialogBuilder.create();
+        Dialog dialog=dialogBuilder.create();
         return dialog;
     }
 
     @Override
     public void getChangedCartDetail(HashMap<Integer, RailRestroOrderModel> changedOrder, int
             totalItems, double totalPrice) {
+        this.totalItems=totalItems;
+        this.totalPrice=totalPrice;
+        this.orderModelHashMap=changedOrder;
         totalItemsInCart.setText(totalItems+"");
         totalPriceTextView.setText("Rs."+totalPrice+"");
         cartItemChangedListener.getChangedCartDetail(changedOrder,totalItems,totalPrice);
-
     }
 
     @Override

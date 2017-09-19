@@ -79,7 +79,16 @@ public class RailRestroVendorDisplayAdapter extends RecyclerView.Adapter<RailRes
             closingTime.setText(model.getClosingTime());
             minimumOrderAmount.setText(model.getMinimumAmount()+"");
             contactNumber.setText(model.getMobileNumber());
-            foodTypesAvailable.setText(model.getFoodTypes());
+            if(model.getMealTypes().equals("Both")){
+                foodTypesAvailable.setText("Veg/Non-Veg");
+            }
+            else if (model.getMealTypes().equals("Veg")){
+                foodTypesAvailable.setText("Veg");
+            }
+            else{
+                foodTypesAvailable.setText(model.getMealTypes());
+            }
+
         }
 
         @Override

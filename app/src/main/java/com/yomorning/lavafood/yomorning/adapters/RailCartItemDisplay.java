@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yomorning.lavafood.yomorning.R;
@@ -58,7 +59,7 @@ public class RailCartItemDisplay extends RecyclerView.Adapter<RailCartItemDispla
 
     class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView itemName,itemCount,itemPrice;
-        ImageButton addItem,removeItem;
+        ImageView addItem,removeItem;
         double price;
         int count,key;
         RailRestroOrderModel orderModel;
@@ -99,10 +100,10 @@ public class RailCartItemDisplay extends RecyclerView.Adapter<RailCartItemDispla
                     if(count-1==0){
                         totalItems=totalItems-1;
                         totalPrice=totalPrice-orderModel.getModel().getSellingPrice();
-                        fragmentCommunicator.getChangedCartDetail(cartDetail,totalItems,totalPrice);
                         cartDetail.remove(keySet.get(getAdapterPosition()));
                         keySet.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
+                        fragmentCommunicator.getChangedCartDetail(cartDetail,totalItems,totalPrice);
                         notifyItemRangeChanged(getAdapterPosition(),keySet.size());
                     }
                     else{

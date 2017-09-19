@@ -1,0 +1,34 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.yomorning.lavafood.yomorning.fragments.StationInfo">
+
+    <RelativeLayout
+        android:id="@+id/station_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/station_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="70dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Enter Station Code(Eg. dli for Delhi)"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/submit_station_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/station_code"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Find"
+            style="@style/google"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+</FrameLayout>

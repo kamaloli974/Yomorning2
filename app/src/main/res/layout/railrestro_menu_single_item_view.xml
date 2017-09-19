@@ -78,7 +78,6 @@
             android:textColor="@android:color/white"
             android:layout_marginTop="@dimen/normal_margin"
             android:padding="@dimen/normal_padding"
-            android:background="@color/colorAccent"
             android:layout_gravity="right" />
     </LinearLayout>
 </android.support.v7.widget.CardView>
