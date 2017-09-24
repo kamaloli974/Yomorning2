@@ -26,5 +26,20 @@
     <string name="dont_have_account">Don\'t have account ? <a>Click here</a> </string>
     <string name="title_activity_testing">Testing</string>
     <string name="security_answer_hint">Enter your answer</string>
-    <string name="forgot_password_text">Forgot password ? Click here</string>
+    <string name="forgot_password_text">Forgot password ? <a>Click here</a></string>
+    <string name="volley_exception_message">Some network issue is detected. Please try again after some time. Sorry for cause inconvenience to you.</string>
+    <string name="volley_exception_title">Network Error</string>
+    <string name="account_existence_checking">Verifying your details...</string>
+    <string name="already_registered">Already Registered</string>
+    <string name="server_error_title">Server Error</string>
+    <string name="server_error_message">Please try again after some time. Thank you.</string>
+    <string name="edit_profile">Edit</string>
+    <string name="new_password">New Password</string>
+    <string name="save">save</string>
+    <string name="want_to_change_password">Change Password? Click here</string>
+    <string name="dont_change_password">Don\'t wan\'t to change password? Click here.</string>
+    <string name="empty_field_message">Please make sure that you have provided value to every fields. Thank you.</string>
+    <string name="empty_field_title">Empty Fields</string>
+    <string name="password_mismatch_title">Password Mismatch</string>
+    <string name="password_mismatch_heading">The password you entered does\'t match. Please try again. Thank you.</string>
 </resources>

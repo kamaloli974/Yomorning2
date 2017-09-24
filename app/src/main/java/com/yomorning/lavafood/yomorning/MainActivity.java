@@ -3,6 +3,7 @@ package com.yomorning.lavafood.yomorning;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,10 @@ import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrder;
 import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrderSystem;
 import com.yomorning.lavafood.yomorning.fragments.StationInfo;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
+import com.yomorning.lavafood.yomorning.user.UserLogin;
+import com.yomorning.lavafood.yomorning.user.UserProfile;
+
+import java.security.MessageDigest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,33 +50,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RailRestroFoodOrder railRestroFoodOrder;
     StationInfo stationInfo;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        stationInfo=new StationInfo();
-        fragmentManager=getFragmentManager();
-        android.app.FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-        Fragment fragment=fragmentManager.findFragmentByTag("stationInfo");
-        if(fragment!=null){
-            fragmentTransaction.remove(fragment);
+        preferences=getApplicationContext().getSharedPreferences("UserCredential",MODE_PRIVATE);
+        String token=preferences.getString("token",null);
+        if(token!=null){
+            stationInfo=new StationInfo();
+            fragmentManager=getFragmentManager();
+            android.app.FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+            Fragment fragment=fragmentManager.findFragmentByTag("stationInfo");
+            if(fragment!=null){
+                fragmentTransaction.remove(fragment);
+            }
+            else{
+                fragmentTransaction.add(R.id.home_activity_container,stationInfo,"stationInfo");
+                fragmentTransaction.commit();
+            }
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
         }
         else{
-            fragmentTransaction.add(R.id.home_activity_container,stationInfo,"stationInfo");
-            fragmentTransaction.commit();
+            startActivity(new Intent(MainActivity.this, UserLogin.class));
+            finish();
         }
 
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -138,6 +150,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_send) {
             Toast.makeText(this, "We can send gift to our friend", Toast.LENGTH_SHORT).show();
+        }
+        else if(id==R.id.profile){
+            startActivity(new Intent(MainActivity.this, UserProfile.class));
+        }
+        else if (id==R.id.logout){
+            SharedPreferences.Editor editor=preferences.edit();
+            editor.clear();
+            editor.apply();
+            startActivity(new Intent(this,UserLogin.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

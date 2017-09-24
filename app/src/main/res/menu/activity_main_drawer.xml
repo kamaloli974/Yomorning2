@@ -31,6 +31,10 @@
                     android:id="@+id/nav_send"
                     android:icon="@drawable/ic_menu_send"
                     android:title="Send" />
+                <item
+                    android:icon="@mipmap/logout"
+                    android:id="@+id/logout"
+                    android:title="Logout"/>
             </group>
         </menu>
     </item>

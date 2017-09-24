@@ -90,6 +90,7 @@
                 android:textSize="@dimen/normal_text_size"
                 android:inputType="textPersonName" />
         </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

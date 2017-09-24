@@ -15,10 +15,13 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="google" parent="Theme.AppCompat.DayNight">
         <item name="colorControlHighlight">@color/colorWhite</item>
         <item name="colorButtonNormal">@color/normalButtonColor</item>
+    </style>
+
+    <style name="SplaceScreen" parent="AppTheme.NoActionBar">
+        <item name="colorPrimaryDark">@color/colorAccent</item>
     </style>
 
 </resources>

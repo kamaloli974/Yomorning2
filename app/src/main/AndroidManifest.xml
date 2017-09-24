@@ -18,24 +18,43 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PresentationActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".railrestroactivities.RailRestroMenuActivity"
             android:label="@string/rail_restro_menu"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:label="Order Summary"
             android:name=".railrestroactivities.RailRestroCartItemDetailDialog"
-            android:theme="@style/AppTheme">
+            android:label="Order Summary"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".user.UserLogin"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".user.UserRegistration"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".user.UserProfile"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".user.EditProfile" />
+        <activity
+            android:name=".SplaceScreenFirst"
+            android:theme="@style/SplaceScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".user.ForgotPassword"
+            android:theme="@style/SplaceScreen" />
+        <activity android:name=".ChangePassword"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
