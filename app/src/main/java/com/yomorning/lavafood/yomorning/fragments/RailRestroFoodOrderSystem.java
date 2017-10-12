@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.adapters.RailCartItemDisplay;
 import com.yomorning.lavafood.yomorning.models.RailRestroOrderModel;
+import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
 import com.yomorning.lavafood.yomorning.railrestroactivities.RailRestroCartItemDetailDialog;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
     double totalPrice;
     int totalItems;
     Context context;
+    RailRestroVendorsModel vendorsModel;
     OnCartItemChangedListener cartItemChangedListener;
     @Nullable
 //    @Override
@@ -57,6 +59,7 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
             orderModelHashMap=(HashMap<Integer,RailRestroOrderModel>)getArguments().getSerializable("cartDetail");
             totalItems=getArguments().getInt("totalItems");
             totalPrice=getArguments().getDouble("totalPrice");
+            vendorsModel=getArguments().getParcelable("vendorsModel");
             Log.e("Cart Detail",orderModelHashMap.size()+"");
         }
     }
@@ -72,12 +75,13 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
     }
 
     public static RailRestroFoodOrderSystem newInstance(HashMap<Integer,RailRestroOrderModel> order,int totalItems,
-                                                       double totalPrice) {
+                                                       double totalPrice,RailRestroVendorsModel model) {
         RailRestroFoodOrderSystem orderSystem = new RailRestroFoodOrderSystem();
         Bundle args = new Bundle();
         args.putSerializable("cartDetail",order);
         args.putInt("totalItems",totalItems);
         args.putDouble("totalPrice",totalPrice);
+        args.putParcelable("vendorsModel",model);
         Log.e("newInstance",order.size()+"");
         orderSystem.setArguments(args);
         return orderSystem;
@@ -96,6 +100,7 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
                 intent.putExtra("cartDetail",orderModelHashMap);
                 intent.putExtra("totalPrice",totalPrice);
                 intent.putExtra("totalItems",totalItems);
+                intent.putExtra("vendorsModel",vendorsModel);
                 dialogInterface.dismiss();
                 startActivity(intent);
             }

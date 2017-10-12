@@ -87,7 +87,8 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             public void onErrorResponse(VolleyError error) {
                 dialog.hide();
 
-                basicFunctionHandler.showAlertDialog("Error!","VolleyError Occure and message is "+error.getCause());
+                basicFunctionHandler.showAlertDialog(getString(R.string.volley_exception_title),
+                        getString(R.string.volley_exception_message));
             }
         });
 
@@ -175,7 +176,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             }
             else{
                 RailRestroFoodOrderSystem orderSystem= RailRestroFoodOrderSystem.newInstance(orderModelHashMap,
-                        totalNumberOfItemsInCart, totalPrice);
+                        totalNumberOfItemsInCart, totalPrice,vendorsModel);
                 orderSystem.show(getFragmentManager(),"cartDisplayFragment");
             }
         }
@@ -188,6 +189,16 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         this.totalNumberOfItemsInCart=totalItems;
         this.orderModelHashMap=changedOrder;
         shoppingItemCount.setText(totalNumberOfItemsInCart+"");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
 

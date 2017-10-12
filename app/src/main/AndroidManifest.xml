@@ -37,6 +37,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".user.UserProfile"
+            android:label="Your Profile"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".user.EditProfile" />
@@ -52,9 +53,15 @@
         <activity
             android:name=".user.ForgotPassword"
             android:theme="@style/SplaceScreen" />
-        <activity android:name=".ChangePassword"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait"
+            android:label="Change Password"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".OrderHistory"
+            android:label="Order History"
+            android:parentActivityName=".MainActivity"
+            ></activity>
     </application>
 
 </manifest>

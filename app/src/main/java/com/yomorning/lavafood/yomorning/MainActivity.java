@@ -161,6 +161,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this,UserLogin.class));
             finish();
         }
+        else if(id==R.id.history){
+            startActivity(new Intent(MainActivity.this,OrderHistory.class));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
