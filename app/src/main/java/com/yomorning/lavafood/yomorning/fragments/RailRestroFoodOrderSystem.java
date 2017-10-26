@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -154,6 +156,7 @@ public class RailRestroFoodOrderSystem extends DialogFragment implements
     public interface OnCartItemChangedListener{
         void getChangedCartDetail(HashMap<Integer,RailRestroOrderModel> changedOrder,int totalItems,double totalPrice);
     }
+
 }
 
 //dialog.setOnShowListener(new DialogInterface.OnShowListener() {

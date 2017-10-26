@@ -14,6 +14,10 @@
             android:id="@+id/ready_cook"
             android:icon="@mipmap/ready_cook_food"
             android:title="Ready To Cook Food" />
+        <item
+            android:id="@+id/pub"
+            android:icon="@mipmap/pub"
+            android:title="Restaurants and Pubs"/>
     </group>
 
     <item android:title="User Section">

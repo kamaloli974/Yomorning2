@@ -10,4 +10,5 @@ public class CredentialProviderClass {
     public static String RAIL_RESTRO_BASIC_API="https://www.railrestro.com/api/";
     public static String BACK_SLASH="/";
     public static String HOST_NAME="http://52.24.15.182/yomorning/api/v1";
+    public static int GOOGLE_SIGN_IN_REQUEST_CODE=101;
 }

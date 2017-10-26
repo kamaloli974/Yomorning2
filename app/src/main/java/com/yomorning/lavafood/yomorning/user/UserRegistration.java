@@ -20,6 +20,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.common.SignInButton;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
@@ -42,6 +44,9 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
     JSONObject dataToBeSent,responseReceived;
     AlertDialog.Builder dialog;
 
+    SignInButton googleSignInButton;
+    LoginButton facebookLoginButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,11 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
         alreadyHaveAccount=(TextView)findViewById(R.id.already_have_account);
         preferences=getApplicationContext().getSharedPreferences("Credential",MODE_PRIVATE);
 
+        googleSignInButton=(SignInButton)findViewById(R.id.login_button_google);
+        facebookLoginButton=(LoginButton)findViewById(R.id.login_button_facebook);
+
+        changeSignInText(googleSignInButton);
+
 
 //        multipleChoiceQuestions=(Spinner)findViewById(R.id.security_questions);
 //        ArrayAdapter<CharSequence> arrayAdapter=ArrayAdapter.createFromResource(UserRegistration.this,R.array.security_questions,
@@ -75,6 +85,18 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
 
         alreadyHaveAccount.setOnClickListener(this);
         submit.setOnClickListener(UserRegistration.this);
+    }
+
+    private void changeSignInText(SignInButton googleSignInButton) {
+        for(int i=0;i<googleSignInButton.getChildCount();i++)
+        {
+            View v=googleSignInButton.getChildAt(i);
+            if(v instanceof TextView){
+                TextView view=(TextView)v;
+                view.setText("Sign Up with Google");
+                return;
+            }
+        }
     }
 
     @Override

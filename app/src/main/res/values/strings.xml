@@ -42,4 +42,10 @@
     <string name="empty_field_title">Empty Fields</string>
     <string name="password_mismatch_title">Password Mismatch</string>
     <string name="password_mismatch_heading">The password you entered does\'t match. Please try again. Thank you.</string>
+
+    <string name="facebook_app_id">150167765589188</string>
+    <string name="fb_login_protocol_scheme">fb150167765589188</string>
+
+    <string name="com_facebook_loginview_log_in_button">Login</string>
+    <string name="non_veg">Non\-Veg</string>
 </resources>

@@ -41,6 +41,40 @@
                     android:layout_alignEnd="@+id/shopping_cart" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
+        <MultiAutoCompleteTextView
+            android:id="@+id/search_food_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search"
+            android:textColorHint="@color/colorWhite"
+            android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/veg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Veg"
+                app:buttonTint="@color/colorWhite"
+                android:textColor="@color/colorWhite"
+                android:layout_margin="@dimen/normal_margin"
+                android:padding="@dimen/normal_margin"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/none_veg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/non_veg"
+                app:buttonTint="@color/colorWhite"
+                android:textColor="@color/colorWhite"
+                android:layout_margin="@dimen/normal_margin"
+                android:padding="@dimen/normal_margin"
+                />
+        </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView

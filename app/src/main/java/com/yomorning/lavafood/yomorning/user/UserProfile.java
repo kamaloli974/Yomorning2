@@ -35,7 +35,6 @@ public class UserProfile extends AppCompatActivity {
         email=(TextView)findViewById(R.id.email_address);
         mobileNumber=(TextView)findViewById(R.id.mobile_number);
         profileImage=(ImageView)findViewById(R.id.profile_image);
-
         setViews();
     }
 

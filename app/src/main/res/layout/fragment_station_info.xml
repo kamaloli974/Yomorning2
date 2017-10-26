@@ -30,5 +30,14 @@
             android:text="Find"
             style="@style/google"
             android:textColor="@android:color/white" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/submit_station_code"
+            android:layout_marginTop="23dp"
+            android:hint="AutoCompleteTextView" />
     </RelativeLayout>
 </FrameLayout>

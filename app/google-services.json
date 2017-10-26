@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "36883147504",
+    "project_id": "firebase-bornbhukkad"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36883147504:android:4431c186e575e1d0",
+        "android_client_info": {
+          "package_name": "com.yomorning.lavafood.yomorning"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36883147504-8ekrjnhkqeu88mk9m2554b7bcaeqt3tu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yomorning.lavafood.yomorning",
+            "certificate_hash": "706005335549f250a60be73aebbb7ad0b315df52"
+          }
+        },
+        {
+          "client_id": "36883147504-n0kebvdjjeqhlvj1jcf5r7tp8l6v903m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvSI3abNltSxj9wr0nC5FZit6wLIKboW4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

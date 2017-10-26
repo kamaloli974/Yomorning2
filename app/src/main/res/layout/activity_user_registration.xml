@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background">
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/register"
                 android:layout_margin="@dimen/normal_margin"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorWhite"
+                android:drawablePadding="5dp" />
             <TextView
                 android:id="@+id/already_have_account"
                 android:layout_width="match_parent"
@@ -151,5 +153,29 @@
                 android:gravity="center"
                 android:text="I already have account ?"
                 />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginTop="7dp">
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button_facebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/white"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"/>
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/login_button_google"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/common_signin_button_text_long"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
         </LinearLayout>
 </ScrollView>

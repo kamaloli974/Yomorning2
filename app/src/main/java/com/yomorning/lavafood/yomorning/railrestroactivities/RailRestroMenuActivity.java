@@ -7,8 +7,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -44,6 +48,9 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     int totalNumberOfItemsInCart=0;
     double totalPrice;
     Toolbar toolbar;
+
+    MultiAutoCompleteTextView multiAutoCompleteTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +60,14 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         dialog=new ProgressDialog(this);
         orderModelHashMap=new HashMap<>();
         vendorsModel= getIntent().getParcelableExtra("railRestroVendorsModel");
+
         recyclerView=(RecyclerView)findViewById(R.id.menu_recycler_view);
         shoppingCart=(ImageView)findViewById(R.id.shopping_cart);
         shoppingCart.setOnClickListener(this);
         basicFunctionHandler=new BasicFunctionHandler(RailRestroMenuActivity.this);
         menuJsonDataParser(vendorsModel.getVendorId());
+
+        multiAutoCompleteTextView=(MultiAutoCompleteTextView)findViewById(R.id.search_food_items);
     }
 
     private void setAdapterToPopulateMenus(ArrayList<RailRestroMenuModel> menu){
@@ -199,6 +209,26 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.rail_restro_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.food_search:
+                if(multiAutoCompleteTextView.getVisibility()==View.VISIBLE)
+                    multiAutoCompleteTextView.setVisibility(View.GONE);
+                else
+                    multiAutoCompleteTextView.setVisibility(View.VISIBLE);
+                break;
+        }
+        return true;
     }
 }
 
