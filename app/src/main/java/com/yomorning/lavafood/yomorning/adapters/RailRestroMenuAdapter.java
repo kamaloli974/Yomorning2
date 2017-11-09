@@ -7,9 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.yomorning.lavafood.yomorning.R;
+import com.yomorning.lavafood.yomorning.filters.RailRestroFoodMenuSearchFilter;
 import com.yomorning.lavafood.yomorning.models.RailRestroMenuModel;
 
 import java.util.ArrayList;
@@ -18,11 +21,12 @@ import java.util.ArrayList;
  * Created by KAMAL OLI on 06/09/2017.
  */
 
-public class RailRestroMenuAdapter extends RecyclerView.Adapter<RailRestroMenuAdapter.MenuViewHolder> {
-    ArrayList<RailRestroMenuModel> menuModelArrayList;
+public class RailRestroMenuAdapter extends RecyclerView.Adapter<RailRestroMenuAdapter.MenuViewHolder> implements Filterable{
+    ArrayList<RailRestroMenuModel> menuModelArrayList,originalData,filterAppliedData;
     Context context;
     LayoutInflater inflater;
     OnMenuItemClickedListener menuItemClickedListner;
+
     public RailRestroMenuAdapter(Context context,ArrayList<RailRestroMenuModel> menuModelArrayList){
         this.context=context;
         if(context instanceof OnMenuItemClickedListener){
@@ -32,6 +36,8 @@ public class RailRestroMenuAdapter extends RecyclerView.Adapter<RailRestroMenuAd
             throw new RuntimeException(context.toString()+" must implement OnMenuItemClickedListener");
         }
         this.menuModelArrayList=menuModelArrayList;
+        this.originalData=menuModelArrayList;
+        this.filterAppliedData=menuModelArrayList;
         inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
@@ -48,6 +54,49 @@ public class RailRestroMenuAdapter extends RecyclerView.Adapter<RailRestroMenuAd
     @Override
     public int getItemCount() {
         return menuModelArrayList.size();
+    }
+
+    public void displayDataForSearchResult(ArrayList<RailRestroMenuModel> searchedItems) {
+        menuModelArrayList=searchedItems;
+
+    }
+
+    @Override
+    public Filter getFilter() {
+        return RailRestroFoodMenuSearchFilter.newInstance(context,originalData,this);
+    }
+
+    public void showAllData() {
+        menuModelArrayList=originalData;
+        Log.e("showAllData","showAllData");
+    }
+
+    public void showVegItems() {
+        filterAppliedData=new ArrayList<>();
+        for(int i=0;i<originalData.size();i++){
+            if(originalData.get(i).getCategoryId()==0){
+                filterAppliedData.add(originalData.get(i));
+            }
+        }
+        menuModelArrayList=filterAppliedData;
+        Log.e("showVegItems","showVegItems");
+    }
+
+    public void showNonVegItems() {
+        filterAppliedData=new ArrayList<>();
+        for(int i=0;i<originalData.size();i++){
+            if(originalData.get(i).getCategoryId()==1){
+                filterAppliedData.add(originalData.get(i));
+            }
+        }
+        menuModelArrayList=filterAppliedData;
+        Log.e("showNonVegItems","showNonVegItems");
+    }
+
+    public void showNothing() {
+        filterAppliedData=new ArrayList<>();
+        menuModelArrayList=filterAppliedData;
+        Log.e("showNothing","showNothing");
     }
 
     class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

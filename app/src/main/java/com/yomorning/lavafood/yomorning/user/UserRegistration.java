@@ -30,6 +30,9 @@ import com.yomorning.lavafood.yomorning.rectifier.BasicFunctionHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class UserRegistration extends AppCompatActivity implements View.OnClickListener,DialogInterface.OnClickListener{
     private Button submit;
     private EditText fName,lName,email,password,rePassword,mblNumber,verificationCodeValue;
@@ -46,6 +49,7 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
 
     SignInButton googleSignInButton;
     LoginButton facebookLoginButton;
+    Pattern alphabetPattern;
 
 
     @Override
@@ -64,6 +68,8 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
         mblNumber=(EditText)findViewById(R.id.mobile_number);
         alreadyHaveAccount=(TextView)findViewById(R.id.already_have_account);
         preferences=getApplicationContext().getSharedPreferences("Credential",MODE_PRIVATE);
+
+        alphabetPattern=Pattern.compile("^[a-zA-Z ]+$");
 
         googleSignInButton=(SignInButton)findViewById(R.id.login_button_google);
         facebookLoginButton=(LoginButton)findViewById(R.id.login_button_facebook);
@@ -128,7 +134,15 @@ public class UserRegistration extends AppCompatActivity implements View.OnClickL
                             else{
                                 if(handler.isEmailValid(emailAddress)){
                                     if (handler.isPasswordLengthValid(pwd)){
-                                        isMobileAndEmailAlreadyRegistered();
+                                        Matcher firstNameMatcher=alphabetPattern.matcher(firstName);
+                                        Matcher lastNameMatcher=alphabetPattern.matcher(lastName);
+                                        if(firstNameMatcher.matches()&&lastNameMatcher.matches()){
+                                            isMobileAndEmailAlreadyRegistered();
+                                        }
+                                        else{
+                                            handler.showAlertDialog("Invalid Name", "First Name and Last Name should only contain" +
+                                                    " letters. Please try again. Thank you. ");
+                                        }
                                     }
                                     else{
                                         handler.showAlertDialog("Invalid Password","Password must be at least 8 of length and alpha-numeric format. Please " +

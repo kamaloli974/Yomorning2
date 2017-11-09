@@ -42,7 +42,7 @@ public class UserProfile extends AppCompatActivity {
         preferences=getApplicationContext().getSharedPreferences("UserCredential",MODE_PRIVATE);
 
         Resources resource=getResources();
-        Bitmap bitmap= BitmapFactory.decodeResource(resource, R.drawable.home_delivery_food);
+        Bitmap bitmap= BitmapFactory.decodeResource(resource, R.drawable.ready_to_cook_background);
         RoundedBitmapDrawable factory= RoundedBitmapDrawableFactory.create(resource,bitmap);
         factory.setCornerRadius(Math.min(bitmap.getWidth(),bitmap.getHeight())/2.0f);
         factory.setCircular(true);

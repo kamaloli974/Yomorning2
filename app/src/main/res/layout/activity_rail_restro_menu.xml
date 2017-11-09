@@ -41,18 +41,33 @@
                     android:layout_alignEnd="@+id/shopping_cart" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
-        <MultiAutoCompleteTextView
-            android:id="@+id/search_food_items"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search"
-            android:textColorHint="@color/colorWhite"
-            android:visibility="gone"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:text="Search"
+                android:gravity="center"
+                android:textColor="@color/colorWhite"/>
+            <android.support.v7.widget.SearchView
+                android:id="@+id/search_menu"
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
+                app:queryHint="Search Food"
+                app:searchHintIcon="@android:drawable/ic_menu_search">
+            </android.support.v7.widget.SearchView>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="3">
+
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/veg"
                 android:layout_width="0dp"
@@ -62,7 +77,8 @@
                 app:buttonTint="@color/colorWhite"
                 android:textColor="@color/colorWhite"
                 android:layout_margin="@dimen/normal_margin"
-                android:padding="@dimen/normal_margin"/>
+                android:padding="@dimen/normal_margin"
+                android:checked="true"/>
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/none_veg"
                 android:layout_width="0dp"
@@ -73,7 +89,9 @@
                 android:textColor="@color/colorWhite"
                 android:layout_margin="@dimen/normal_margin"
                 android:padding="@dimen/normal_margin"
+                android:checked="true"
                 />
+
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 

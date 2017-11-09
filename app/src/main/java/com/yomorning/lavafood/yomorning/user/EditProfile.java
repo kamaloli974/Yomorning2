@@ -30,6 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EditProfile extends AppCompatActivity implements View.OnClickListener {
     EditText oldPassword,newPassword,reNewPassword,firstName,lastName,mobileNumber;
     TextView changePassword;
@@ -38,6 +41,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
     Button save;
     BasicFunctionHandler basicFunctionHandler;
     SharedPreferences preference;
+
+    Pattern alphabetPattern;
 
     ProgressDialog progressDialog;
     @Override
@@ -51,6 +56,8 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
         lastName=(EditText)findViewById(R.id.last_name);
         mobileNumber=(EditText)findViewById(R.id.mobile_number);
         progressDialog=new ProgressDialog(this);
+
+        alphabetPattern=Pattern.compile("^[a-zA-Z ]+$");
 
         changePassword=(TextView)findViewById(R.id.change_password);
 
@@ -91,36 +98,45 @@ public class EditProfile extends AppCompatActivity implements View.OnClickListen
                 lname=lastName.getText().toString().trim();
                 mblNumber=mobileNumber.getText().toString().trim();
 
-                if(passwordContainer.getVisibility()==View.GONE){
-                    if(fname.isEmpty()||fname.isEmpty()||mblNumber.isEmpty()){
-                        basicFunctionHandler.showAlertDialog("Field are empty","Please make to fill all the fields correctly. Thank" +
-                                " you.");
-                    }
-                    else{
-                        if(mblNumber.length()==10){
-                           sendDataToServer(0);
+                Matcher firstNameMatcher=alphabetPattern.matcher(fname);
+                Matcher lastNameMatcher=alphabetPattern.matcher(lname);
+                if(firstNameMatcher.matches()&&lastNameMatcher.matches()){
+                    if(passwordContainer.getVisibility()==View.GONE){
+                        if(fname.isEmpty()||fname.isEmpty()||mblNumber.isEmpty()){
+                            basicFunctionHandler.showAlertDialog("Field are empty","Please make to fill all the fields correctly. Thank" +
+                                    " you.");
                         }
                         else{
-                            basicFunctionHandler.showAlertDialog("Invalid Mobile","Please make sure mobile number of 10 digit");
-                        }
+                            if(mblNumber.length()==10){
+                                sendDataToServer(0);
+                            }
+                            else{
+                                basicFunctionHandler.showAlertDialog("Invalid Mobile","Please make sure mobile number of 10 digit");
+                            }
 
+                        }
+                    }
+                    else{
+                        if(oPassword.isEmpty()||nPassword.isEmpty()||rnPassword.isEmpty()){
+                            basicFunctionHandler.showAlertDialog("Empty fields","No fields should be left empty. Please try again" +
+                                    "filling the blank fields. Thank you.");
+                        }
+                        else{
+                            if(nPassword.equals(rnPassword)){
+                                sendDataToServer(1);
+                            }
+                            else{
+                                basicFunctionHandler.showAlertDialog("Password Mismatch","Then new password you entered does't " +
+                                        " match with each other. Please try again. Thank you.");
+                            }
+                        }
                     }
                 }
                 else{
-                    if(oPassword.isEmpty()||nPassword.isEmpty()||rnPassword.isEmpty()){
-                        basicFunctionHandler.showAlertDialog("Empty fields","No fields should be left empty. Please try again" +
-                                "filling the blank fields. Thank you.");
-                    }
-                    else{
-                        if(nPassword.equals(rnPassword)){
-                            sendDataToServer(1);
-                        }
-                        else{
-                            basicFunctionHandler.showAlertDialog("Password Mismatch","Then new password you entered does't " +
-                                    " match with each other. Please try again. Thank you.");
-                        }
-                    }
+                    basicFunctionHandler.showAlertDialog("Invalid Name!", "First Name and Last Name should only contain" +
+                            " letters. Please try again. Thank you. ");
                 }
+
                 break;
             case R.id.change_password:
                 if(passwordContainer.getVisibility()==View.GONE){

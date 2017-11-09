@@ -48,6 +48,7 @@ public class ChangePassword extends AppCompatActivity implements View.OnClickLis
         securityCode=(EditText)findViewById(R.id.code);
         confirm=(Button)findViewById(R.id.confirm);
         confirm.setOnClickListener(this);
+        codeInfo=(TextView)findViewById(R.id.code_info);
     }
 
     @Override

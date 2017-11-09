@@ -3,6 +3,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:icon="@drawable/home_icon"
+            android:title="Home"
+            android:id="@+id/home"
+            />
+        <item
             android:id="@+id/travel_food"
             android:icon="@mipmap/travel_food"
             android:title="Travel Food" />
@@ -40,10 +45,13 @@
                     android:icon="@mipmap/history"
                     android:id="@+id/history"/>
                 <item
+                    android:icon="@drawable/about_us_icon"
+                    android:title="About Us"
+                    android:id="@+id/about_us"/>
+                <item
                     android:icon="@mipmap/logout"
                     android:id="@+id/logout"
                     android:title="Logout"/>
-
             </group>
         </menu>
     </item>

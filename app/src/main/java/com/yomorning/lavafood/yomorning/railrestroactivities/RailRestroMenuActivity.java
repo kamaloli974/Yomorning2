@@ -3,14 +3,17 @@ package com.yomorning.lavafood.yomorning.railrestroactivities;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -37,7 +40,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RailRestroMenuActivity extends AppCompatActivity implements RailRestroMenuAdapter.OnMenuItemClickedListener,
-        View.OnClickListener,RailRestroFoodOrderSystem.OnCartItemChangedListener{
+        View.OnClickListener,RailRestroFoodOrderSystem.OnCartItemChangedListener,SearchView.OnQueryTextListener,
+        CompoundButton.OnCheckedChangeListener {
     RailRestroVendorsModel vendorsModel;
     private RecyclerView recyclerView;
     private BasicFunctionHandler basicFunctionHandler;
@@ -49,7 +53,10 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     double totalPrice;
     Toolbar toolbar;
 
-    MultiAutoCompleteTextView multiAutoCompleteTextView;
+    AppCompatCheckBox veg,nonVeg;
+
+    SearchView searchFoodItems;
+    RailRestroMenuAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +70,25 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
 
         recyclerView=(RecyclerView)findViewById(R.id.menu_recycler_view);
         shoppingCart=(ImageView)findViewById(R.id.shopping_cart);
-        shoppingCart.setOnClickListener(this);
-        basicFunctionHandler=new BasicFunctionHandler(RailRestroMenuActivity.this);
+
         menuJsonDataParser(vendorsModel.getVendorId());
 
-        multiAutoCompleteTextView=(MultiAutoCompleteTextView)findViewById(R.id.search_food_items);
+        searchFoodItems=(SearchView)findViewById(R.id.search_menu);
+
+        veg=(AppCompatCheckBox)findViewById(R.id.veg);
+        nonVeg=(AppCompatCheckBox)findViewById(R.id.none_veg);
+        shoppingCart.setOnClickListener(this);
+        basicFunctionHandler=new BasicFunctionHandler(RailRestroMenuActivity.this);
+        searchFoodItems.setOnQueryTextListener(this);
+
+        veg.setOnClickListener(this);
+        nonVeg.setOnClickListener(this);
+        veg.setOnCheckedChangeListener(this);
+        nonVeg.setOnCheckedChangeListener(this);
     }
 
     private void setAdapterToPopulateMenus(ArrayList<RailRestroMenuModel> menu){
-        RailRestroMenuAdapter adapter=new RailRestroMenuAdapter(this,menu);
+        adapter=new RailRestroMenuAdapter(this,menu);
         LinearLayoutManager manager=new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         shoppingItemCount=(TextView) findViewById(R.id.shopping_item_count);
@@ -179,16 +196,18 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.shopping_cart){
-            if(totalNumberOfItemsInCart==0){
-                basicFunctionHandler.showAlertDialog("Opps!!","You don't have anything in cart. Please" +
-                        " select some food items from menu.");
-            }
-            else{
-                RailRestroFoodOrderSystem orderSystem= RailRestroFoodOrderSystem.newInstance(orderModelHashMap,
-                        totalNumberOfItemsInCart, totalPrice,vendorsModel);
-                orderSystem.show(getFragmentManager(),"cartDisplayFragment");
-            }
+        switch (view.getId()){
+            case R.id.shopping_cart:
+                if(totalNumberOfItemsInCart==0){
+                    basicFunctionHandler.showAlertDialog("Opps!!","You don't have anything in cart. Please" +
+                            " select some food items from menu.");
+                }
+                else{
+                    RailRestroFoodOrderSystem orderSystem= RailRestroFoodOrderSystem.newInstance(orderModelHashMap,
+                            totalNumberOfItemsInCart, totalPrice,vendorsModel);
+                    orderSystem.show(getFragmentManager(),"cartDisplayFragment");
+                }
+                break;
         }
     }
 
@@ -220,15 +239,68 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.food_search:
-                if(multiAutoCompleteTextView.getVisibility()==View.VISIBLE)
-                    multiAutoCompleteTextView.setVisibility(View.GONE);
-                else
-                    multiAutoCompleteTextView.setVisibility(View.VISIBLE);
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.getFilter().filter(newText);
+        Log.e("TextOnSearch",newText);
+        return false;
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        switch (compoundButton.getId()){
+            case R.id.veg:
+                Log.e("Veg","Veg Checked");
+                if (veg.isChecked()&&nonVeg.isChecked()){
+                    adapter.showAllData();
+                    adapter.notifyDataSetChanged();
+                }
+                else if(veg.isChecked()&&!nonVeg.isChecked()){
+                    adapter.showVegItems();
+                    Log.e("Veg","Veg Checked");
+                    adapter.notifyDataSetChanged();
+                }
+                else if(nonVeg.isChecked()){
+                    adapter.showNonVegItems();
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    adapter.showNothing();
+                    adapter.notifyDataSetChanged();
+
+                }
+                break;
+            case R.id.none_veg:
+                if (veg.isChecked()&&nonVeg.isChecked()){
+                    adapter.showAllData();
+                    adapter.notifyDataSetChanged();
+                }
+                else if(veg.isChecked()&&!nonVeg.isChecked()){
+                    adapter.showVegItems();
+                    adapter.notifyDataSetChanged();
+                }
+                else if(nonVeg.isChecked()){
+                    adapter.showNonVegItems();
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    adapter.showNothing();
+                    adapter.notifyDataSetChanged();
+                }
                 break;
         }
-        return true;
+        Log.e("Checked","Checked");
     }
 }
 

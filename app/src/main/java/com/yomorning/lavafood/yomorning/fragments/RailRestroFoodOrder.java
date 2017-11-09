@@ -135,6 +135,4 @@ public class RailRestroFoodOrder extends Fragment implements View.OnClickListene
         vendorListDisplayer.setAdapter(adapter);
     }
 
-
-
 }

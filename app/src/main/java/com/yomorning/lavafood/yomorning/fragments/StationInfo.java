@@ -5,21 +5,29 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
+import com.yomorning.lavafood.yomorning.models.StationCodeModel;
 import com.yomorning.lavafood.yomorning.rectifier.BasicFunctionHandler;
 
 import org.json.JSONArray;
@@ -29,12 +37,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class StationInfo extends Fragment implements View.OnClickListener {
-    EditText stationCode;
+    AutoCompleteTextView stationCode;
     View indivisualView;
     Button submitStationCode;
     BasicFunctionHandler basicFunctionHandler;
 
     private receiveListOfVendors mListener;
+
+    ArrayList<String> stationList;
 
     ProgressDialog dialog;
 
@@ -53,20 +63,72 @@ public class StationInfo extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Station Info");
         indivisualView=inflater.inflate(R.layout.fragment_station_info, container, false);
         stationCode=indivisualView.findViewById(R.id.station_code);
         basicFunctionHandler=new BasicFunctionHandler(getActivity());
         submitStationCode=indivisualView.findViewById(R.id.submit_station_code);
+        stationList=new ArrayList<>();
         mListener=(receiveListOfVendors)getActivity();
         submitStationCode.setOnClickListener(this);
         dialog=new ProgressDialog(getActivity());
+        loadStationCode();
         return indivisualView;
+    }
+
+
+
+    private void loadStationCode() {
+        dialog.setCancelable(false);
+        dialog.setMessage("Please wait...");
+        dialog.show();
+        JsonObjectRequest request=new JsonObjectRequest(Request.Method.GET,CredentialProviderClass.HOST_NAME + "/get_all_stations",
+                null,new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        dialog.dismiss();
+                        Log.e("stationCodes",response.toString());
+                       stationList= parseJsonForStationList(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        dialog.dismiss();
+                        basicFunctionHandler.showAlertDialog(getString(R.string.volley_exception_title),
+                                getString(R.string.volley_exception_message));
+                    }
+                });
+        VolleySingletonPattern.getInstance(getActivity()).addToRequestQueue(request);
+    }
+
+    //This parseJsonForStationList method parses the stationInfo Obtained from server and returns it as List
+    private ArrayList<String> parseJsonForStationList(JSONObject object) {
+        ArrayList<String> stationList=new ArrayList<>();
+
+        try {
+            JSONArray stationArray=object.getJSONArray("result");
+            for(int i=0;i<stationArray.length();i++){
+                String code=stationArray.getJSONObject(i).getString("id");
+                String name=stationArray.getJSONObject(i).getString("name");
+                Log.e("stationCode",stationArray.getJSONObject(i).getString("id"));
+                Log.e("stationName",stationArray.getJSONObject(i).getString("name"));
+                stationList.add(name+" ("+code+")");
+            }
+            ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,stationList);
+            stationCode.setAdapter(adapter);
+        } catch (JSONException e) {
+            Log.e("JSONException",e.getMessage());
+        }
+
+        return stationList;
     }
 
     @Override
@@ -95,7 +157,9 @@ public class StationInfo extends Fragment implements View.OnClickListener {
                 }
                 else{
                     if (basicFunctionHandler.isConnectedToNetwork()){
-                        JSONParserForVendors(stationCode.getText().toString().trim());
+                        String[] array=stationCode.getText().toString().trim().split("\\(");
+                        array=array[1].split("\\)");
+                        JSONParserForVendors(array[0].toLowerCase());
                         Log.e("StationCode",stationCode.getText().toString());
                     }
                     else{
@@ -186,5 +250,10 @@ public class StationInfo extends Fragment implements View.OnClickListener {
     public interface receiveListOfVendors {
         // TODO: Update argument type and name
         void onFragmentInteraction(ArrayList<RailRestroVendorsModel> list);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.rail_restro_menu,menu);
     }
 }

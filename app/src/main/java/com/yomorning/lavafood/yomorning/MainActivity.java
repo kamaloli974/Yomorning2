@@ -31,6 +31,7 @@ import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrder;
 import com.yomorning.lavafood.yomorning.fragments.RailRestroFoodOrderSystem;
 import com.yomorning.lavafood.yomorning.fragments.StationInfo;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
+import com.yomorning.lavafood.yomorning.organization.Home;
 import com.yomorning.lavafood.yomorning.user.UserLogin;
 import com.yomorning.lavafood.yomorning.user.UserProfile;
 
@@ -43,7 +44,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        RailRestroFoodOrder.OnFragmentInteractionListener, StationInfo.receiveListOfVendors {
+        RailRestroFoodOrder.OnFragmentInteractionListener, StationInfo.receiveListOfVendors,
+        Home.OnCommunicationWithHomeFragment {
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     FragmentManager fragmentManager;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String token=preferences.getString("token",null);
         if(token!=null){
             stationInfo=new StationInfo();
+            stationInfo.setHasOptionsMenu(true);
             fragmentManager=getFragmentManager();
             android.app.FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
             Fragment fragment=fragmentManager.findFragmentByTag("stationInfo");
@@ -83,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this, UserLogin.class));
             finish();
         }
-
     }
+
 
     @Override
     public void onBackPressed() {
@@ -139,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else {
                 FragmentTransaction transaction=getFragmentManager().beginTransaction();
                 transaction.replace(R.id.home_activity_container,fragment,"stationInfo");
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
             // Handle the camera action
@@ -163,6 +167,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if(id==R.id.history){
             startActivity(new Intent(MainActivity.this,OrderHistory.class));
+        }
+        else if(id==R.id.home){
+            Home homeFragment=Home.newInstance();
+            FragmentTransaction transaction=getFragmentManager().beginTransaction();
+            transaction.replace(R.id.home_activity_container,homeFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,5 +209,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transaction.addToBackStack(null);
             transaction.commit();
         }
+    }
+
+    @Override
+    public void onCommunicationWithHomeFragment(Uri uri) {
+
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    card_view:cardCornerRadius="5dp">
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="@dimen/normal_margin"
+        android:orientation="vertical"
+        android:padding="5dp">
+        <ImageView
+            android:id="@+id/content_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.75"
+            android:scaleType="fitXY"
+            android:src="@drawable/home_delivery_food" />
+
+        <TextView
+            android:id="@+id/display_label"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.25"
+            android:text="Order Delicious Food While you are travelling"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/normal_text_size"
+            android:paddingTop="@dimen/normal_padding"
+            android:textAlignment="center"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

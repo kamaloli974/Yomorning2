@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,26 +18,26 @@ import com.yomorning.lavafood.yomorning.models.ServiceSelectionChoiceModel;
 import java.util.ArrayList;
 
 /**
- * Created by KAMAL OLI on 03/09/2017.
+ * Created by KAMAL OLI on 30/10/2017.
  */
 
-public class ServiceSelectionChoiceAdapter extends RecyclerView.Adapter<ServiceSelectionChoiceAdapter.ViewHolderForOurService>{
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderForOurService> {
     Context context;
     LayoutInflater inflater;
     ArrayList<ServiceSelectionChoiceModel> choiceArrayList;
-    public ServiceSelectionChoiceAdapter(Context c,ArrayList<ServiceSelectionChoiceModel> choiceArrayList){
+    public HomeAdapter(Context c,ArrayList<ServiceSelectionChoiceModel> choiceArrayList){
         context=c;
         this.choiceArrayList=choiceArrayList;
         inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public ViewHolderForOurService onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=inflater.inflate(R.layout.presentation_single_view,parent,false);
+        View view=inflater.inflate(R.layout.home_single_view,parent,false);
         ViewHolderForOurService holder=new ViewHolderForOurService(view);
         return holder;
     }
     @Override
-    public void onBindViewHolder(ViewHolderForOurService holder, int position) {
+    public void onBindViewHolder(HomeAdapter.ViewHolderForOurService holder, int position) {
         holder.initializeView(position);
     }
 
@@ -45,17 +46,25 @@ public class ServiceSelectionChoiceAdapter extends RecyclerView.Adapter<ServiceS
         return choiceArrayList.size();
     }
 
+    public void setUserFilter(ArrayList<ServiceSelectionChoiceModel> userFilter) {
+        choiceArrayList=new ArrayList<>();
+        choiceArrayList.addAll(userFilter);
+        notifyDataSetChanged();
+    }
+
     class ViewHolderForOurService extends RecyclerView.ViewHolder implements View.OnClickListener{
         LinearLayout layout;
         TextView label;
+        ImageView contentImage;
         public ViewHolderForOurService(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             layout=itemView.findViewById(R.id.linear_layout);
+            contentImage=itemView.findViewById(R.id.content_image);
             label=itemView.findViewById(R.id.display_label);
         }
         public void initializeView(int position) {
-            layout.setBackgroundResource(choiceArrayList.get(position).getImageId());
+            contentImage.setImageDrawable(context.getResources().getDrawable(choiceArrayList.get(position).getImageId()));
             label.setText(choiceArrayList.get(position).getLabel());
         }
 
