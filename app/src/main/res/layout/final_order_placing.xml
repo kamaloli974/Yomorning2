@@ -105,7 +105,6 @@
                 android:background="@drawable/edit_text_rounded_border"
                 android:padding="15dp"
                 android:layout_margin="10dp"
-                android:textColorHighlight=""
                 android:ems="10"
                 android:hint="@string/email"
                 android:textColorHint="#2962FF"

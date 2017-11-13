@@ -12,7 +12,7 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="150dp"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
             <RelativeLayout
@@ -22,7 +22,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Bornbhukkad"
-                    android:gravity="center"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:padding="@dimen/normal_padding"
+                    android:textAlignment="center"
                     android:textColor="@color/colorWhite"
                     android:textSize="24sp"/>
             </RelativeLayout>
@@ -31,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             card_view:cardElevation="5dp"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp">
@@ -63,7 +65,7 @@
                     android:layout_marginBottom="20dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="8dp"
-                    android:textColorHint="#A5C5FA"
+                    android:textColorHint="@color/textHintColor"
                     android:paddingTop="14dp"
                     android:paddingBottom="14dp" />
 

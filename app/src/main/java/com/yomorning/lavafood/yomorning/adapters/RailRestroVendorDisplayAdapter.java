@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -57,36 +58,42 @@ public class RailRestroVendorDisplayAdapter extends RecyclerView.Adapter<RailRes
     }
 
     class VendorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView vendorsName,openingTime,closingTime,minimumOrderAmount,contactNumber,foodTypesAvailable;
+        TextView vendorsName,openingTime,closingTime,minimumOrderAmount,contactNumber,foodTypesAvailable,delivery_time;
         Button selectVendor;
+        ImageView categoryImageView;
 
         public VendorViewHolder(View itemView) {
             super(itemView);
             vendorsName=itemView.findViewById(R.id.vendors_name);
-            openingTime=itemView.findViewById(R.id.opening_time_value);
             closingTime=itemView.findViewById(R.id.closing_time_value);
             minimumOrderAmount=itemView.findViewById(R.id.value);
             contactNumber=itemView.findViewById(R.id.contact_value);
             foodTypesAvailable=itemView.findViewById(R.id.food_types_value);
+            categoryImageView=itemView.findViewById(R.id.category_image_view);
             selectVendor=itemView.findViewById(R.id.select_vendor);
+            delivery_time=itemView.findViewById(R.id.delivery_time_value);
             selectVendor.setOnClickListener(this);
         }
 
         public void setViews(int position) {
             model=railRestroVendorsList.get(position);
             vendorsName.setText(model.getCompanyName());
-            openingTime.setText(model.getOpeningTime());
-            closingTime.setText(model.getClosingTime());
-            minimumOrderAmount.setText(model.getMinimumAmount()+"");
-            contactNumber.setText(model.getMobileNumber());
+            closingTime.setText(model.getOpeningTime()+"-"+model.getClosingTime());
+            minimumOrderAmount.setText(context.getString(R.string.rupee_symbol)+" "+model.getMinimumAmount()+"");
+            contactNumber.setText("+91 "+model.getMobileNumber());
+            delivery_time.setText(model.getOrderTiming()+" min");
             if(model.getMealTypes().equals("Both")){
                 foodTypesAvailable.setText("Veg/Non-Veg");
+                categoryImageView.setImageDrawable(context.getResources().getDrawable(R.mipmap.non_vegeterian_icon));
             }
             else if (model.getMealTypes().equals("Veg")){
                 foodTypesAvailable.setText("Veg");
+                categoryImageView.setImageDrawable(context.getResources().getDrawable(R.mipmap.vegetarian_icon));
+
             }
             else{
                 foodTypesAvailable.setText(model.getMealTypes());
+                categoryImageView.setImageDrawable(context.getResources().getDrawable(R.mipmap.non_vegeterian_icon));
             }
 
         }

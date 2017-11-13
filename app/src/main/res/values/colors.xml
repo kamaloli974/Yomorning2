@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#2979FF</color>
     <color name="colorPrimaryDark">#003183</color>
-    <color name="colorAccent">#5e35b1</color>
+    <color name="colorAccent">#2979FF</color>
     <color name="textColorPrimary">#000000</color>
     <color name="colorAccentLight">#9162e4</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="normalButtonColor">@color/colorAccent</color>
+    <color name="colorBlack"> #555555</color>
+    <color name="backgroundColor">#F5F5F5</color>
+    <color name="textHintColor">#A5C5FA</color>
 </resources>

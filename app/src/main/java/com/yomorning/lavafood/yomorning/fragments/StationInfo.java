@@ -157,6 +157,7 @@ public class StationInfo extends Fragment implements View.OnClickListener {
                 }
                 else{
                     if (basicFunctionHandler.isConnectedToNetwork()){
+
                         String[] array=stationCode.getText().toString().trim().split("\\(");
                         array=array[1].split("\\)");
                         JSONParserForVendors(array[0].toLowerCase());
