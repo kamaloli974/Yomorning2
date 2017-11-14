@@ -14,4 +14,6 @@
     <dimen name="card_bottom_padding">24dp</dimen>
     <dimen name="buttonWidth">120dp</dimen>
     <dimen name="button_height">30dp</dimen>
+    <dimen name="cardLeftRightBottonMargin">8dp</dimen>
+    <dimen name="edit_text_text_size">14sp</dimen>
 </resources>

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -78,6 +79,7 @@ public class RailRestroFoodOrder extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         indivisualView= inflater.inflate(R.layout.fragment_rail_restro_food_order, container, false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("RailRestro");
         basicFunctionHandler=new BasicFunctionHandler(getActivity());
         vendorListDisplayer=indivisualView.findViewById(R.id.rail_restro_recycler_view);
         setAdapterToFragment(vendorsList);

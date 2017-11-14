@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SELECT PAYMENT METHOD"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/cardLeftRightBottonMargin"
+        android:layout_marginEnd="@dimen/cardLeftRightBottonMargin"
+        android:layout_marginTop="24dp"
+        android:layout_margin="@dimen/cardLeftRightBottonMargin"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        />
+    <RadioButton
+        android:id="@+id/cash_on_delivery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:layout_marginStart="@dimen/cardLeftRightBottonMargin"
+        android:layout_marginEnd="@dimen/cardLeftRightBottonMargin"
+        android:layout_marginTop="24dp"
+        android:layout_margin="@dimen/cardLeftRightBottonMargin"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:text="Cash On Delivery"
+        android:textSize="14sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/cancel_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.50"
+            android:layout_height="match_parent"
+            android:text="CANCEL"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"/>
+        <Button
+            android:id="@+id/pay_amount"
+            android:layout_width="0dp"
+            android:layout_weight="0.50"
+            android:layout_height="wrap_content"
+            android:text="Pay"
+            android:textStyle="italic"
+            android:background="@drawable/normal_button"
+            android:textColor="@color/colorWhite"/>
+    </LinearLayout>
+</LinearLayout>

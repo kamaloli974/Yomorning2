@@ -1,6 +1,8 @@
 package com.yomorning.lavafood.yomorning.railrestroactivities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
@@ -50,13 +53,14 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     ImageView shoppingCart;
     HashMap<Integer,RailRestroOrderModel> orderModelHashMap;
     int totalNumberOfItemsInCart=0;
-    double totalPrice;
+    double totalPrice=0;
     Toolbar toolbar;
-
     AppCompatCheckBox veg,nonVeg;
 
     SearchView searchFoodItems;
     RailRestroMenuAdapter adapter;
+
+    Button payAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +68,15 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         setContentView(R.layout.activity_rail_restro_menu);
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        payAmount=(Button)findViewById(R.id.pay);
+        payAmount.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
         dialog=new ProgressDialog(this);
         orderModelHashMap=new HashMap<>();
         vendorsModel= getIntent().getParcelableExtra("railRestroVendorsModel");
+
+        getSupportActionBar().setTitle(vendorsModel.getVendorsName());
 
         recyclerView=(RecyclerView)findViewById(R.id.menu_recycler_view);
         shoppingCart=(ImageView)findViewById(R.id.shopping_cart);
@@ -85,6 +95,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         nonVeg.setOnClickListener(this);
         veg.setOnCheckedChangeListener(this);
         nonVeg.setOnCheckedChangeListener(this);
+        payAmount.setOnClickListener(this);
     }
 
     private void setAdapterToPopulateMenus(ArrayList<RailRestroMenuModel> menu){
@@ -172,7 +183,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
     }
 
     @Override
-    public void getSelectedItem(RailRestroMenuModel model) {
+    public void addItemToCart(RailRestroMenuModel model) {
         if (orderModelHashMap.containsKey(model.getItemId())){
             RailRestroOrderModel orderModel=orderModelHashMap.get(model.getItemId());
             orderModel.setItemCount(orderModel.getItemCount()+1);
@@ -180,6 +191,7 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             totalNumberOfItemsInCart=totalNumberOfItemsInCart+1;
             totalPrice=totalPrice+model.getSellingPrice();
             shoppingItemCount.setText(totalNumberOfItemsInCart+"");
+            payAmount.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
         }
         else{
             totalNumberOfItemsInCart=totalNumberOfItemsInCart+1;
@@ -191,6 +203,25 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
             orderModelHashMap.put(model.getItemId(),order);
             Log.e("First Time","Item id"+model.getItemName());
             shoppingItemCount.setText(totalNumberOfItemsInCart+"");
+            payAmount.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
+        }
+    }
+
+    @Override
+    public void removeItemFromCart(RailRestroMenuModel model){
+        RailRestroOrderModel orderModel=orderModelHashMap.get(model.getItemId());
+        if(totalNumberOfItemsInCart-1==0){
+            totalNumberOfItemsInCart=totalNumberOfItemsInCart-1;
+            totalPrice=totalPrice-orderModel.getModel().getSellingPrice();
+            orderModel.setItemCount(orderModel.getItemCount()-1);
+            payAmount.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
+
+        }
+        else{
+            totalNumberOfItemsInCart=totalNumberOfItemsInCart-1;
+            orderModel.setItemCount(orderModel.getItemCount()-1);
+            totalPrice=totalPrice-orderModel.getModel().getSellingPrice();
+            payAmount.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
         }
     }
 
@@ -207,6 +238,14 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
                             totalNumberOfItemsInCart, totalPrice,vendorsModel);
                     orderSystem.show(getFragmentManager(),"cartDisplayFragment");
                 }
+                break;
+            case R.id.pay:
+                Intent intent=new Intent(RailRestroMenuActivity.this, RailRestroCartItemDetailDialog.class);
+                intent.putExtra("cartDetail",orderModelHashMap);
+                intent.putExtra("totalPrice",totalPrice);
+                intent.putExtra("totalItems",totalNumberOfItemsInCart);
+                intent.putExtra("vendorsModel",vendorsModel);
+                startActivity(intent);
                 break;
         }
     }
@@ -239,6 +278,11 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -255,7 +299,6 @@ public class RailRestroMenuActivity extends AppCompatActivity implements RailRes
         Log.e("TextOnSearch",newText);
         return false;
     }
-
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

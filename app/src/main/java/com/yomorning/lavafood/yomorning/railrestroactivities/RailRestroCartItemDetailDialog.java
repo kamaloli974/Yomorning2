@@ -6,12 +6,15 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,6 +31,7 @@ import com.yomorning.lavafood.yomorning.MainActivity;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
+import com.yomorning.lavafood.yomorning.fragments.PaymentOptionSelectionBottomSheet;
 import com.yomorning.lavafood.yomorning.models.RailRestroMenuModel;
 import com.yomorning.lavafood.yomorning.models.RailRestroOrderModel;
 import com.yomorning.lavafood.yomorning.models.RailRestroVendorsModel;
@@ -43,7 +47,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-public class RailRestroCartItemDetailDialog extends AppCompatActivity implements View.OnClickListener{
+public class RailRestroCartItemDetailDialog extends AppCompatActivity implements View.OnClickListener,
+        PaymentOptionSelectionBottomSheet.PaymentBottomSheetInterface {
     HashMap<Integer,RailRestroOrderModel> cartItemInfo;
     double totalPrice;
     int totalItems;
@@ -53,7 +58,7 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
     EditText trainNumber,pnrNumber,coach,seatNumber,fullName,emailAddress,mobileNumber;
     String train,pnr,coa,seat,name,email,mobile,date,time;
     RadioButton cashOnDelivery;
-    Button submitOrder;
+    Button submitOrder,pay;
     TextView totalAmountToBePaid,totalNumberOfItems;
     Calendar calendar;
     BasicFunctionHandler basicFunctionHandler;
@@ -72,7 +77,8 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
         totalItems=getIntent().getIntExtra("totalItems",0);
         vendorsModel=getIntent().getParcelableExtra("vendorsModel");
         orderDetail=formatOrder(cartItemInfo);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Order Details");
         preferences=getApplicationContext().getSharedPreferences("UserCredential",MODE_PRIVATE);
 
         calendar=Calendar.getInstance();
@@ -100,11 +106,14 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
 
 
 
-        totalAmountToBePaid=(TextView)findViewById(R.id.total_amount_to_be_paid);
+
         totalNumberOfItems=(TextView)findViewById(R.id.total_number_of_items);
 
         cashOnDelivery=(RadioButton)findViewById(R.id.cash_on_delivery);
-        submitOrder=(Button)findViewById(R.id.submit_order);
+        //submitOrder=(Button)findViewById(R.id.submit_order);
+        pay=(Button)findViewById(R.id.pay);
+
+        pay.setText("Pay "+getString(R.string.rupee_symbol)+" "+totalPrice);
 
         cday=getOrganizedMonth(day+"");
         cmonth=getOrganizedMonth(month+"");
@@ -115,11 +124,12 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
         deliveryTime.setText(getOrganizedMonth(hour+"")+":"+getOrganizedMonth(minute+"")+":"+"00");
         deliveryDate.setText(year+"-"+getOrganizedMonth(month+"")+"-"+getOrganizedMonth(day+""));
         totalNumberOfItems.setText(totalItems+"");
-        totalAmountToBePaid.setText("Rs."+totalPrice+"");
+        //totalAmountToBePaid.setText("Rs."+totalPrice+"");
 
         deliveryDate.setOnClickListener(this);
         deliveryTime.setOnClickListener(this);
-        submitOrder.setOnClickListener(this);
+        pay.setOnClickListener(this);
+        //submitOrder.setOnClickListener(this);
 
         dialog=new ProgressDialog(this);
     }
@@ -133,7 +143,7 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
             case R.id.delivery_time_value:
                 setUserSelectedTime();
                 break;
-            case R.id.submit_order:
+            case R.id.pay:
                 train=trainNumber.getText().toString().trim();
                 pnr=pnrNumber.getText().toString().trim();
                 name=fullName.getText().toString().trim();
@@ -151,15 +161,17 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
                 else{
                     if(pnrNumber.getText().toString().trim().length()==10){
                         if(mobileNumber.getText().toString().trim().length()==10){
-                            if(cashOnDelivery.isChecked()){
-                                placeOrder();
-                             //   basicFunctionHandler.showAlertDialog("Hello","Now we are ready to place order to RailRestro. But we have to " +
-                                 //       " inform them saying we are ready to place order. Once we receive confirmation then we will be able to place order");
-                            }
-                            else{
-                                basicFunctionHandler.showAlertDialog("Select Payment Method","Please select payment method to proceed" +
-                                        " to make payment. Thank you.");
-                            }
+                            BottomSheetDialogFragment bottomSheet=PaymentOptionSelectionBottomSheet.getInstance(totalPrice);
+                            bottomSheet.show(getSupportFragmentManager(),bottomSheet.getTag());
+//                            if(cashOnDelivery.isChecked()){
+//                                placeOrder();
+//                             //   basicFunctionHandler.showAlertDialog("Hello","Now we are ready to place order to RailRestro. But we have to " +
+//                                 //       " inform them saying we are ready to place order. Once we receive confirmation then we will be able to place order");
+//                            }
+//                            else{
+//                                basicFunctionHandler.showAlertDialog("Select Payment Method","Please select payment method to proceed" +
+//                                        " to make payment. Thank you.");
+//                            }
                         }
                         else{
                             basicFunctionHandler.showAlertDialog("Invalid Mobile Number","Mobile must be of length 10 digit.Please" +
@@ -173,6 +185,11 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
                     }
 
                 }
+                break;
+//            case R.id.pay:
+//                BottomSheetDialogFragment bottomSheet=PaymentOptionSelectionBottomSheet.getInstance(totalPrice);
+//                bottomSheet.show(getSupportFragmentManager(),bottomSheet.getTag());
+//                break;
         }
     }
 
@@ -353,5 +370,20 @@ public class RailRestroCartItemDetailDialog extends AppCompatActivity implements
         dialog.setCancelable(false);
         dialog.create();
         dialog.show();
+    }
+
+    @Override
+    public void cashOnDeliveryPaymentMethod(String modeOfPayment) {
+        placeOrder();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

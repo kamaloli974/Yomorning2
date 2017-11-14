@@ -22,7 +22,8 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end">
+                android:layout_gravity="end"
+                android:visibility="gone">
                 <ImageButton
                     android:id="@+id/shopping_cart"
                     android:layout_width="wrap_content"
@@ -44,7 +45,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/colorWhite"
+            android:visibility="gone">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.2"
@@ -52,21 +55,24 @@
                 android:textSize="16sp"
                 android:text="Search"
                 android:gravity="center"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/normalButtonColor"/>
             <android.support.v7.widget.SearchView
                 android:id="@+id/search_menu"
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
                 android:layout_height="wrap_content"
                 app:queryHint="Search Food"
-                app:searchHintIcon="@android:drawable/ic_menu_search">
+                >
             </android.support.v7.widget.SearchView>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:background="@color/colorWhite"
+            android:layout_margin="5dp"
+            android:visibility="gone">
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/veg"
@@ -74,22 +80,24 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Veg"
-                app:buttonTint="@color/colorWhite"
-                android:textColor="@color/colorWhite"
+                app:buttonTint="@color/normalButtonColor"
+                android:textColor="@color/colorAccent"
                 android:layout_margin="@dimen/normal_margin"
                 android:padding="@dimen/normal_margin"
-                android:checked="true"/>
+                android:checked="true"
+                android:visibility="gone"/>
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/none_veg"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/non_veg"
-                app:buttonTint="@color/colorWhite"
-                android:textColor="@color/colorWhite"
+                app:buttonTint="@color/normalButtonColor"
+                android:textColor="@color/colorAccent"
                 android:layout_margin="@dimen/normal_margin"
                 android:padding="@dimen/normal_margin"
                 android:checked="true"
+                android:visibility="gone"
                 />
 
         </LinearLayout>
@@ -99,7 +107,16 @@
         android:id="@+id/menu_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appBar">
+        android:layout_below="@id/appBar"
+        android:layout_above="@+id/pay">
     </android.support.v7.widget.RecyclerView>
-
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay"
+        android:textStyle="italic"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/normal_button"
+        android:textColor="@color/colorWhite"
+        android:id="@+id/pay" />
 </RelativeLayout>

@@ -35,7 +35,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".PresentationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -44,11 +45,13 @@
             android:label="@string/rail_restro_menu"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".railrestroactivities.RailRestroCartItemDetailDialog"
             android:label="Order Summary"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".railrestroactivities.RailRestroMenuActivity"/>
         <activity
             android:name=".user.UserLogin"
             android:theme="@style/AppTheme.NoActionBar" />

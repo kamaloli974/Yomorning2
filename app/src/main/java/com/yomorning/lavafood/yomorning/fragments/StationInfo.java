@@ -74,12 +74,14 @@ public class StationInfo extends Fragment implements View.OnClickListener {
         indivisualView=inflater.inflate(R.layout.fragment_station_info, container, false);
         stationCode=indivisualView.findViewById(R.id.station_code);
         basicFunctionHandler=new BasicFunctionHandler(getActivity());
-        submitStationCode=indivisualView.findViewById(R.id.submit_station_code);
         stationList=new ArrayList<>();
+        submitStationCode=indivisualView.findViewById(R.id.submit_station_code);
         mListener=(receiveListOfVendors)getActivity();
         submitStationCode.setOnClickListener(this);
         dialog=new ProgressDialog(getActivity());
-        loadStationCode();
+        if(stationList.size()==0){
+            loadStationCode();
+        }
         return indivisualView;
     }
 
@@ -157,7 +159,6 @@ public class StationInfo extends Fragment implements View.OnClickListener {
                 }
                 else{
                     if (basicFunctionHandler.isConnectedToNetwork()){
-
                         String[] array=stationCode.getText().toString().trim().split("\\(");
                         array=array[1].split("\\)");
                         JSONParserForVendors(array[0].toLowerCase());
