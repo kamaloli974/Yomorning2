@@ -12,6 +12,18 @@
             android:icon="@mipmap/travel_food"
             android:title="Travel Food" />
         <item
+            android:id="@+id/fitness_food"
+            android:title="Fitness Food Delivery"
+            android:icon="@mipmap/icon_fitness"/>
+        <item
+            android:id="@+id/biryani_247"
+            android:title="Order Biryani247 to your door step"
+            android:icon="@mipmap/biryani"
+            />
+        <item android:id="@+id/home_delivery_chef"
+            android:title="Home Delivery From best Chef around you"
+            android:icon="@mipmap/icon_chef_hat"/>
+        <item
             android:id="@+id/home_delivery"
             android:icon="@mipmap/home_delivery_food"
             android:title="Home delivery Food" />
@@ -29,29 +41,21 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/profile"
-                    android:icon="@mipmap/profile_icon"
-                    android:title="Your Profile"/>
-                <item
                     android:id="@+id/nav_share"
-                    android:icon="@drawable/ic_menu_share"
+                    android:icon="@drawable/ic_search_black_24dp"
                     android:title="Share" />
                 <item
                     android:id="@+id/nav_send"
-                    android:icon="@drawable/ic_menu_send"
+                    android:icon="@drawable/ic_send_black_24dp"
                     android:title="Send" />
                 <item
                     android:title="Order History"
                     android:icon="@mipmap/history"
                     android:id="@+id/history"/>
                 <item
-                    android:icon="@drawable/about_us_icon"
+                    android:icon="@drawable/ic_info_black_24dp"
                     android:title="About Us"
                     android:id="@+id/about_us"/>
-                <item
-                    android:icon="@mipmap/logout"
-                    android:id="@+id/logout"
-                    android:title="Logout"/>
             </group>
         </menu>
     </item>

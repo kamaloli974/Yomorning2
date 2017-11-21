@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.yomorning.lavafood.yomorning.MainActivity;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.models.ServiceSelectionChoiceModel;
+import com.yomorning.lavafood.yomorning.organization.Home;
 
 import java.util.ArrayList;
 
@@ -25,10 +26,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderForO
     Context context;
     LayoutInflater inflater;
     ArrayList<ServiceSelectionChoiceModel> choiceArrayList;
+    OnHomeAdapterCommunication communicate;
     public HomeAdapter(Context c,ArrayList<ServiceSelectionChoiceModel> choiceArrayList){
         context=c;
         this.choiceArrayList=choiceArrayList;
         inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        communicate=(OnHomeAdapterCommunication)context;
     }
     @Override
     public ViewHolderForOurService onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -77,8 +80,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolderForO
             editor.apply();
             editor.commit();
             editor.clear();
-            Intent intent=new Intent(context, MainActivity.class);
-            context.startActivity(intent);
+            communicate.userSelectedChoice(1);
+//            Intent intent=new Intent(context, MainActivity.class);
+//            context.startActivity(intent);
         }
+    }
+    public interface OnHomeAdapterCommunication{
+        void userSelectedChoice(int userChoice);
     }
 }

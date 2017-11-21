@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,13 +42,17 @@ import com.yomorning.lavafood.yomorning.ChangePassword;
 import com.yomorning.lavafood.yomorning.PresentationActivity;
 import com.yomorning.lavafood.yomorning.R;
 import com.yomorning.lavafood.yomorning.VolleySingletonPattern;
+import com.yomorning.lavafood.yomorning.bottomsheets.FBGooglePassword;
 import com.yomorning.lavafood.yomorning.credentials.CredentialProviderClass;
 import com.yomorning.lavafood.yomorning.rectifier.BasicFunctionHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserLogin extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+import java.util.Arrays;
+
+public class UserLogin extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+        FBGooglePassword.FbGoogleSignInCommunication {
     EditText email,password,fEmail;
     Button submit;
     TextView dAccount,forgotPassword;
@@ -56,6 +68,10 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
     GoogleApiClient googleApiClient;
 
     LoginButton facebookLoginButton;
+
+    CallbackManager callbackManager;
+
+    String googleSignIn,facebookSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +92,44 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
         dialog.setCancelable(false);
         dAccount.setOnClickListener(UserLogin.this);
 
+        callbackManager=CallbackManager.Factory.create();
         facebookLoginButton=(LoginButton)findViewById(R.id.login_button_facebook);
+        facebookLoginButton.setReadPermissions(Arrays.asList("email","public_profile"));
+
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(final LoginResult loginResult) {
+                GraphRequest newRequest=GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            emailAddress=object.getString("email");
+                            String firstName=object.getString("first_name");
+                            facebookSignIn="facebookSignIn";
+                            BottomSheetDialogFragment bottomSheet=FBGooglePassword.getInstance(firstName,"facebook");
+                            bottomSheet.show(getSupportFragmentManager(),bottomSheet.getTag());
+                        } catch (JSONException e) {
+                            Log.e("JSONException",e.getMessage());
+                        }
+                    }
+                });
+                Bundle bundle=new Bundle();
+                bundle.putString("fields", "first_name,last_name,id,name,email");
+                newRequest.setParameters(bundle);
+                newRequest.executeAsync();
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.e("OnCancelFacebook","Facebook Login Canceled");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("FacebookException",error.getMessage());
+            }
+        });
 
         GoogleSignInOptions signInOption=new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -103,7 +156,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                                 "Please make sure that no fields are empty and try again.");
                     }
                     else{
-                        processUserRequest();
+                        processUserRequest("default");
                     }
                 }
                 else{
@@ -127,7 +180,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
         startActivityForResult(googleSignInIntent,CredentialProviderClass.GOOGLE_SIGN_IN_REQUEST_CODE);
     }
 
-    void processUserRequest(){
+    void processUserRequest(final String media){
         try {
             object.put("EMAIL_ID",emailAddress);
             object.put("password",pwd);
@@ -157,8 +210,11 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                         editor.putString("mobileNumber",response.getString("mobile_number"));
                         editor.putInt("isEmailVerified",Integer.parseInt(response.getString("is_email_verified")));
                         editor.putInt("isMobileVerified",Integer.parseInt(response.getString("is_mobile_verified")));
+                        editor.putString("media",media);
                         editor.apply();
+                        dialog=null;
                         startActivity(new Intent(UserLogin.this, PresentationActivity.class));
+
                         finish();
 //                        handler.showAlertDialog("Success",response.getString("message")+" and Your authorization token is "
 //                        +response.getString("token"));
@@ -167,7 +223,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
                         handler.showAlertDialog("Error !!","Unexpected error occurred please report Error.");
                     }
                 } catch (JSONException e) {
-                    Log.e("JSONException","Json parsing error occured"+e.getMessage());
+                    Log.e("JSONException","Json parsing error occurred"+e.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -266,6 +322,7 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
         if(requestCode==1){
             if (resultCode== Activity.RESULT_OK){
                 email.setText(data.getStringExtra("email"));
@@ -281,7 +338,11 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
     private void handleGoogleSignInResult(GoogleSignInResult signInResult) {
         if(signInResult.isSuccess()){
             GoogleSignInAccount account=signInResult.getSignInAccount();
-            Log.e("UserName",account.getDisplayName()+" UserEmail= "+account.getEmail());
+            emailAddress=account.getEmail();
+            this.googleSignIn=account.getIdToken();
+            BottomSheetDialogFragment bottomSheet=FBGooglePassword.getInstance(account.getGivenName(),"google");
+            bottomSheet.show(getSupportFragmentManager(),bottomSheet.getTag());
+            Log.e("UserName",account.getDisplayName()+" UserEmail= "+account.getEmail()+account.getFamilyName()+" "+account.getGivenName());
         }
         else{
             Log.e("SignIn Error","Could't sign In ");
@@ -291,5 +352,11 @@ public class UserLogin extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void getFbGoogleSignInPassword(String password,String media) {
+        this.pwd=password;
+        processUserRequest(media);
     }
 }

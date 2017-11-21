@@ -62,8 +62,11 @@
             android:name=".user.UserProfile"
             android:label="Your Profile"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".user.EditProfile" />
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".user.EditProfile"
+            android:parentActivityName=".user.UserProfile" />
         <activity
             android:name=".SplaceScreenFirst"
             android:theme="@style/SplaceScreen">

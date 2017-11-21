@@ -24,7 +24,7 @@ import com.yomorning.lavafood.yomorning.models.ServiceSelectionChoiceModel;
 
 import java.util.ArrayList;
 
-public class Home extends Fragment implements android.widget.SearchView.OnQueryTextListener {
+public class Home extends Fragment implements android.widget.SearchView.OnQueryTextListener{
 
 
     private OnCommunicationWithHomeFragment mListener;
@@ -65,9 +65,9 @@ public class Home extends Fragment implements android.widget.SearchView.OnQueryT
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(int userChoice) {
         if (mListener != null) {
-            mListener.onCommunicationWithHomeFragment(uri);
+            mListener.onCommunicationWithHomeFragment(userChoice);
         }
     }
 
@@ -88,7 +88,6 @@ public class Home extends Fragment implements android.widget.SearchView.OnQueryT
         mListener = null;
     }
 
-
     private void setAdapterForPresentation() {
         adapter=new HomeAdapter(getActivity(),
                 initializeDataToArrayList());
@@ -100,7 +99,7 @@ public class Home extends Fragment implements android.widget.SearchView.OnQueryT
 
     public interface OnCommunicationWithHomeFragment {
         // TODO: Update argument type and name
-        void onCommunicationWithHomeFragment(Uri uri);
+        void onCommunicationWithHomeFragment(int userChoice);
     }
 
     public ArrayList<ServiceSelectionChoiceModel> initializeDataToArrayList(){
